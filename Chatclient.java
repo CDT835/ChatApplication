@@ -16,11 +16,11 @@ class ChatClient {
     private JButton sendButton;
 
     public ChatClient() {
-        // Giao diện tổng thể
+      
         frame.setLayout(new BorderLayout(10, 10));
         frame.getContentPane().setBackground(new Color(250, 250, 255));
 
-        // Header với icon và thông báo
+        
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(85, 170, 255));
         headerPanel.setPreferredSize(new Dimension(frame.getWidth(), 50));
@@ -34,7 +34,7 @@ class ChatClient {
         headerPanel.add(headerLabel, BorderLayout.CENTER);
         frame.add(headerPanel, BorderLayout.NORTH);
 
-        // Khu vực hiển thị tin nhắn
+      
         messageArea.setEditable(false);
         messageArea.setLineWrap(true);
         messageArea.setWrapStyleWord(true);
@@ -45,7 +45,7 @@ class ChatClient {
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         frame.add(scrollPane, BorderLayout.CENTER);
 
-        // Khu vực nhập tin nhắn và nút gửi
+     
         JPanel inputPanel = new JPanel(new BorderLayout(5, 5));
         inputPanel.setBackground(new Color(250, 250, 255));
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -63,7 +63,7 @@ class ChatClient {
         sendButton.setPreferredSize(new Dimension(90, 32));
         sendButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        // Hiệu ứng hover nút gửi
+    
         sendButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 sendButton.setBackground(new Color(75, 150, 240));
@@ -78,10 +78,10 @@ class ChatClient {
         frame.add(inputPanel, BorderLayout.SOUTH);
 
         frame.setSize(600, 450);
-        frame.setLocationRelativeTo(null); // Căn giữa màn hình
+        frame.setLocationRelativeTo(null);
         frame.setResizable(false);
 
-        // Xử lý sự kiện gửi tin nhắn
+      
         textField.addActionListener(e -> sendMessage());
         sendButton.addActionListener(e -> sendMessage());
     }

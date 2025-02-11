@@ -8,14 +8,12 @@ public class MessageMD {
     private final String content;
     private final Timestamp timestamp;
 
-    // Constructor
     public MessageMD(String sender, String content) {
         this.sender = sender;
         this.content = content;
         this.timestamp = new Timestamp(System.currentTimeMillis());
     }
 
-    // Getters
     public int getId() {
         return id;
     }

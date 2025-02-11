@@ -1,17 +1,41 @@
 package chatapplication;
 
+import javax.swing.*;
+import java.awt.*;
 import java.net.*;
 import java.io.*;
 import java.util.*;
 import java.sql.*;
 
-class ChatServer {
+public class ChatServer {
     private static final int PORT = 5000;
     private static final HashSet<PrintWriter> writers = new HashSet<>();
+    private static DefaultListModel<String> userListModel = new DefaultListModel<>();
+    private static JList<String> userList = new JList<>(userListModel);
+    private static JFrame frame;
 
     public static void main(String[] args) throws Exception {
         System.out.println("Chat Server is running...");
         final ServerSocket listener = new ServerSocket(PORT);
+
+        
+        frame = new JFrame("Chat Server");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 400);
+        frame.setLayout(new BorderLayout());
+
+       
+        JPanel userPanel = new JPanel(new BorderLayout());
+        userPanel.setBorder(BorderFactory.createTitledBorder("Users Online"));
+        userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane userScrollPane = new JScrollPane(userList);
+        userPanel.add(userScrollPane, BorderLayout.CENTER);
+        
+        frame.add(userPanel, BorderLayout.WEST);
+
+    
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
 
         try {
             while (true) {
@@ -46,6 +70,7 @@ class ChatServer {
                     synchronized (writers) {
                         if (!name.isEmpty()) {
                             writers.add(out);
+                            addUserToList(name);
                             break;
                         }
                     }
@@ -56,9 +81,9 @@ class ChatServer {
                 String message;
                 while ((message = in.readLine()) != null) {
                     if (!message.isEmpty()) {
-                        // Save message to database
+                    
                         saveMessage(name, message);
-                        // Broadcast message to all clients
+                    
                         synchronized (writers) {
                             for (PrintWriter writer : writers) {
                                 writer.println("MESSAGE " + name + ": " + message);
@@ -72,6 +97,7 @@ class ChatServer {
                 if (out != null) {
                     synchronized (writers) {
                         writers.remove(out);
+                        removeUserFromList(name);  
                     }
                 }
                 try {
@@ -80,6 +106,18 @@ class ChatServer {
                     System.out.println("Socket close error: " + e.getMessage());
                 }
             }
+        }
+
+        private void addUserToList(String name) {
+            SwingUtilities.invokeLater(() -> {
+                userListModel.addElement(name); 
+            });
+        }
+
+        private void removeUserFromList(String name) {
+            SwingUtilities.invokeLater(() -> {
+                userListModel.removeElement(name);  
+            });
         }
 
         private void saveMessage(final String sender, final String content) {
